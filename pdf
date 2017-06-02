@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+from PyPDF2 import PdfFileReader
+import sys
+import os
+
+with open(sys.argv[1], "rb") as file:
+    input1 = PdfFileReader(file)
+    info = input1.getDocumentInfo()
+    if info:
+        author = info.author
+        title = info.title
+    else:
+        print("No metadata")
+
+if author and title:
+    author = author.strip().lower().replace(" ", "_")
+    title = title.strip().lower().replace(" ", "_")
+    filename = title + "".join(["_", "[", author, "]", ".pdf"])
+    os.rename(sys.argv[1], author.strip().lower().replace(" ", "_"))
+    print("Renamed '{}' to '{}'".format(sys.argv[1], filename))
+else:
+    print("No author and title")
